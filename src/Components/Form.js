@@ -102,11 +102,11 @@ const Form = () => {
     return(
         <>
             <div>
-                <h2>Build Your Own Pizza</h2>
+                <h2>Create Your Own Pizza</h2>
                 <img alt="pizza image" src={image}/>
             </div>
             <form onSubmit={submitForm}>
-                <h3>Build Your Pizza Form</h3>
+                <h3>Create Your Pizza Form</h3>
 
                 <label htmlFor="name"><h4>Your Name</h4>
                 {errorState.name.length > 0 ? <p>{errorState.name}</p> : null}

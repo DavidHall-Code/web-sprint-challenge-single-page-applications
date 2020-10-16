@@ -21,7 +21,7 @@ describe('Form testing', () => {
     //check to see if it can fill out the address
     cy.get('[name="address"]').type(address).should('have.value', address)
     
-    //check to see ig it can select multiple checkboxes
+    //check to see that you can select multipal ingredeants 
     cy.get('[name="mushroom"], [name="onion"]').check().should('be.checked') //and it passes
 
     //select a size so the form can be submited
