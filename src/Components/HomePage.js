@@ -13,7 +13,7 @@ export default function HomePage(props) {
     return(
         <>
         <img alt="pizza image" id="homePage-image" src={image} />
-        <h2>Want a pizza full of codeing excitement</h2>
+        <h2> Looking for a hot, fresh pizza that goes great while coding?</h2>
         <button className="homePage-button" onClick={navToPizzaForm}>ORDER NOW</button>
         </>
     )

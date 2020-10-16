@@ -4,20 +4,18 @@ import image from "./Assets/Pizza.jpg";
 import axios from "axios";
 import * as yup from "yup";
 
+//schema for validation
 const formSchema = yup.object().shape({
-    name: yup.string().required("A name is required!")
-        .min(2, "Name must include atleast 2 characters!")
-        .matches(/[a-aZ-z] [a-zA-Z]{2,}/, "Must be letters only!"),
-
-    address: yup.string().required("Enter a valid address!"),
-
-    size: yup.string().required("You must choose a size!"),
-
-    pepperoni: yup.boolean(),
-    cheese: yup.boolean(),
-    chicken: yup.boolean(),
-    pineapple: yup.boolean(),
-    special: yup.string()
+        name: yup.string().required("Name is required.")
+            .min(2, "Name must be at least 2 characters long.")
+            .matches(/[a-zA-z][a-zA-Z]{2,}/, "Name must be letters only."),
+        address: yup.string().required("Please leave an address."), 
+        size: yup.string().required("Must choose a size."),
+        pepperoni: yup.boolean(),
+        cheese: yup.boolean(),
+        mushroom: yup.boolean(),
+        onion: yup.boolean(),
+        special: yup.string()
 })
 
 const Form = () => {
@@ -26,176 +24,137 @@ const Form = () => {
     const price3 = "$24.99";
 
 
-
-const [formState, setFormState] = useState({
-    name: '',
-    address: '',
-    size: '',
-    pepperoni: false,
-    cheese: false,
-    chicken: false,
-    pineapple: false,
-    special: '',
-});
-
-
-const [errorState, setErrorState] = useState({
-    name: '',
-    address: '',
-    size: '',
-    pepperoni: '',
-    cheese: '',
-    chicken: '',
-    pineapple: '',
-    special: ''
-})
-
- //form validation
- const validate = (e) => {
-    let value =
-  e.target.type === "checkbox" ? e.target.checked : e.target.value;
-  yup
-   .reach(formSchema, e.target.name)
-   .validate(value)
-   .then((valid) => {
-       setErrorState({...errorState, [e.target.name]: ''});
-   })
-   .catch((err) => {
-       //console.log(err.errors);
-       setErrorState({...errorState, [e.target.name]: err.errors[0]});
-   });
-};
-
-const [buttonDisabled, setButtonDisabled] = useState(true);
-useEffect(() => {
-    formSchema.isValid(formState).then((valid) => {
-      setButtonDisabled(!valid);
-    });
-  }, [formState]);
-
-const inputChange = (e) => {
-    e.persist();
-    validate(e);
-    const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
-    setFormState({...formState, [e.target.name]: value})
-}
-
-const [postedData, setPostedData] = useState([]); //place to hold the data coming back from the server
-const submitForm = (e) => {
-    e.preventDefault();
-    console.log("Form submited!!");
-    setFormState({
+    const [formState, setFormState] = useState({
         name: '',
         address: '',
         size: '',
-        red: '',
-        garlic: '',
-        bbq: '',
-        pepperoni: '',
-        cheese: '',
-        chicken: '',
-        pineapple: '',
+        pepperoni: false,
+        cheese: false,
+        mushroom: false,
+        onion: false,
         special: ''
     });
-    axios
-     .post("https://reqres.in/api/users", formState)
-     .then((res) => {
-         console.log(res);
-         setPostedData(res.data);
-     })
-     .catch((err) => console.log(err))
-};
 
-return(
-    <>
-        <div>
-            <h2>Build Your Own Pizza</h2>
-            <img alt="pizza image" src={image}/>
-        </div>
-        <form onSubmit={submitForm}>
-            <h3>Build Your Pizza Form</h3>
+    const [errorState, setErrorState] = useState({
+        name: '',
+        address: '',
+        size: '',
+        pepperoni: '',
+        cheese: '',
+        mushroom: '',
+        onion: '',
+        special: ''
+    })
 
-            <label htmlFor="name"><h4>Your Name</h4>
-            {errorState.name.length > 0 ? <p>{errorState.name}</p> : null}
-            </label>
-            <input placeholder="Full Name" type="text" name="name" value={formState.name} onChange={inputChange} />
+    //form validation
+    const validate = (e) => {
+        let value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+      yup
+       .reach(formSchema, e.target.name)
+       .validate(value)
+       .then((valid) => {
+           setErrorState({...errorState, [e.target.name]: ''});
+       })
+       .catch((err) => {
+           //console.log(err.errors);
+           setErrorState({...errorState, [e.target.name]: err.errors[0]});
+       });
+    };
 
-            <label htmlFor="address"><h4>Where do we deliver?</h4>
-            {errorState.address.length > 0 ? <p>{errorState.address}</p> : null}</label>
-            <textarea name="address" placeholder="Your Address Here" value={formState.address} onChange={inputChange} />
+    const [buttonDisabled, setButtonDisabled] = useState(true);
+    useEffect(() => {
+        formSchema.isValid(formState).then((valid) => {
+          setButtonDisabled(!valid);
+        });
+      }, [formState]);
 
-            <label htmlFor="size"><h4>Choose a size</h4>
-            </label>
-            <select id="select-tag" name="size" value={formState.size} onChange={inputChange}>
-                <option value={null}>*choose a size*</option>
-                <option value="small">Small {price1}</option>
-                <option value="medium">Medium {price2}</option>
-                <option value="large">Large {price3}</option>
-            </select>
+    const inputChange = (e) => {
+        e.persist();
+        validate(e);
+        const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+        setFormState({...formState, [e.target.name]: value})
+    }
 
-            {/* <div className="sauce-div">
-                <h4 id="sauce">Choose a sauce</h4>
-                <label htmlFor="red">Classic Red</label>
-                <input className="radio" type="radio" name="sauce" id="red" value={formState.sauce}  onChange={inputChange}/>
-                <label htmlFor="garlic">Garlic Ranch</label>
-                <input className="radio" type="radio" name="sauce" id="garlic" onChange={inputChange} value={formState.sauce}/>
-                <label htmlFor="bbq">BBQ Sauce</label>
-                <input className="radio" type="radio" name="sauce"  id="bbq" onChange={inputChange} value={formState.sauce} />
-            </div> */}
+    const [postedData, setPostedData] = useState([]); //place to hold the data coming back from the server
+    const submitForm = (e) => {
+        e.preventDefault();
+        console.log("Form submited!!");
+        setFormState({
+            name: '',
+            address: '',
+            size: '',
+            pepperoni: '',
+            cheese: '',
+            mushroom: '',
+            onion: '',
+            special: ''
+        });
+        axios
+         .post("https://reqres.in/api/users", formState)
+         .then((res) => {
+             console.log(res);
+             setPostedData(res.data);
+         })
+         .catch((err) => console.log(err))
+    };
 
-            <div className="toppings">
-                <h4 id="toppings">Choose your toppings</h4>
+    return(
+        <>
+            <div>
+                <h2>Build Your Own Pizza</h2>
+                <img alt="pizza image" src={image}/>
+            </div>
+            <form onSubmit={submitForm}>
+                <h3>Build Your Pizza Form</h3>
 
-                <label htmlFor="pepperoni">Pepperoni</label>
-                <input className="checkbox" type="checkbox" name="pepperoni" value={formState.pepperoni} onChange={inputChange} />
+                <label htmlFor="name"><h4>Your Name</h4>
+                {errorState.name.length > 0 ? <p>{errorState.name}</p> : null}
+                </label>
+                <input placeholder="Full Name" type="text" name="name" value={formState.name} onChange={inputChange} />
 
-                <label htmlFor="cheese">Just Cheese</label>
-                <input className="checkbox" type="checkbox" name="cheese" value={formState.cheese} onChange={inputChange} />
+                <label htmlFor="address"><h4>Where do we deliver?</h4>
+                {errorState.address.length > 0 ? <p>{errorState.address}</p> : null}</label>
+                <textarea name="address" placeholder="Your Address Here" value={formState.address} onChange={inputChange} />
 
-                <label htmlFor="chicken">Chicken</label>
-                <input className="checkbox" type="checkbox" name="chicken" value={formState.chicken} onChange={inputChange} />
+                <label htmlFor="size"><h4>Choose a size</h4>
+                </label>
+                <select id="select-tag" name="size" value={formState.size} onChange={inputChange}>
+                    <option value={null}>*choose a size*</option>
+                    <option value="small">Small {price1}</option>
+                    <option value="medium">Medium {price2}</option>
+                    <option value="large">Large {price3}</option>
+                </select>
 
-                <label htmlFor="pineapple">Pineapple</label>
-                <input className="checkbox" type="checkbox" name="pineapple" value={formState.pineapple} onChange={inputChange} />
-            </div>    
+                
+                <div className="toppings">
+                    <h4 id="toppings">Choose your toppings</h4>
 
-                <label htmlFor="special"><h4>Any Special Requests?</h4></label>
-            <textarea name="special" value={formState.special} onChange={inputChange} />
+                   <label htmlFor="cheese">Cheese</label>
+                    <input className="checkbox" type="checkbox" name="cheese" value={formState.cheese} onChange={inputChange} />
+                   
+                    <label htmlFor="pepperoni">Pepperoni</label>
+                    <input className="checkbox" type="checkbox" name="pepperoni" value={formState.pepperoni} onChange={inputChange} />
 
-            <h4>Finished? Check your order, then press the button below.</h4>
-            <button disabled={buttonDisabled} type="submit">Place Your Order</button>
-        </form>
-        <pre>{JSON.stringify(postedData, null, 2)}</pre>
-    </>
-)
+                    <label htmlFor="mushroom">Mushroom</label>
+                    <input className="checkbox" type="checkbox" name="mushroom" value={formState.mushroom} onChange={inputChange} />
+
+                    <label htmlFor="onion">Onion</label>
+                    <input className="checkbox" type="checkbox" name="onion" value={formState.onion} onChange={inputChange} />
+                </div>    
+
+                    <label htmlFor="special"><h4>Any Special Requests?</h4></label>
+                <textarea name="special" value={formState.special} onChange={inputChange} />
+
+                <h4>All Done?</h4>
+                <button disabled={buttonDisabled} type="submit">Place Your Order</button>
+            </form>
+            <pre>{JSON.stringify(postedData, null, 2)}</pre>
+        </>
+    )
 }
 
 export default Form;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
