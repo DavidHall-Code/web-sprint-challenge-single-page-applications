@@ -1,10 +1,23 @@
 import React from "react";
+import { Route, Link, Switch } from "react-router-dom";
+import Form from "./Components/Form";
+import HomePage from "./Components/HomePage";
+import image from "../Assets/Pizza.jpg"
 
 const App = () => {
   return (
-    <>
-      <h1>Lambda Eats</h1>
-      <p>You can remove this code and create your own header</p>
+    <div className="App">
+
+      <header>
+        <h1 className="pageName">Lambda Eats</h1>
+        <div className="nav-links">
+          <Link
+        </div>
+      
+      
+      </header>
+      
+      
     </>
   );
 };
