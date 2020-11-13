@@ -2,7 +2,8 @@ import React from "react";
 import { Route, Link, Switch } from 'react-router-dom'
 import Form from './Components/Form'
 import HomePage from './Components/Home'
-import image from './Components/Assets/Pizza.jpg'
+//import image from './Components/assets/Pizza.jpg'
+//import Header from "./components/header"
 import './App.css'
 
 

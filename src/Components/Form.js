@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 //import { Link, Route} from 'react-router-dom'
-import image from './Assets/Pizza.jpg'
+import image from './assets/Pizza.jpg'
 import axios from 'axios'
 import * as yup from 'yup'
 import Schema from '../Validation/form_schema'
@@ -41,14 +41,15 @@ const validate = (e) => {
     e.target.type === 'checkbox' ? e.target.checked : e.target.value
     
     yup
-        .reach(Schema, e.target.name)
-        .validate(value)
-        .then((valid) => {
-            setErrorState({...errorState, [e.target.name] : ''})
-        })
-        .catch((err) => {
-            setErrorState({...errorState, [e.target.name] : RegExp.errors[0]})
-        })
+    .reach(Schema, e.target.name)
+    .validate(value)
+    .then((valid) => {
+        setErrorState({...errorState, [e.target.name]: ''});
+    })
+    .catch((err) => {
+        //console.log(err.errors);
+        setErrorState({...errorState, [e.target.name]: err.errors[0]});
+    });
 }
 
 const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -113,9 +114,9 @@ return (
                 </label>
                 <select id="select-tag" name="size" value={formState.size} onChange={inputChange}>
                     <option value={null}>*choose a size*</option>
-                    <option value="small">10 inch:  {price1}</option>
-                    <option value="medium">14 inch:  {price2}</option>
-                    <option value="large">16 inch:  {price3}</option>
+                    <option value="small">Small {price1}</option>
+                    <option value="medium">Medium {price2}</option>
+                    <option value="large">Large {price3}</option>
                 </select>
 
                 
