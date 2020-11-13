@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Link, Switch } from 'react-router-dom'
 //import Form from './Components/Form'
-//import HomePage from './Components/Home'
+import HomePage from './Components/Home'
 import image from './Components/Assets/Pizza.jpg'
 import './App.css'
 
@@ -17,15 +17,15 @@ function App () {
         </div>
       </header>
 
-      {/* <Switch>
-        <Route path='/pizza'>
+      <Switch>
+        {/* <Route path='/pizza'>
           <Form />
-        </Route>
+        </Route> */}
 
         <Route path='/'>
           <HomePage />
         </Route>
-      </Switch> */}
+      </Switch>
     </div>
   )
 }
